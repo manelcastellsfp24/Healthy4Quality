@@ -1,0 +1,16 @@
+# Archivos y carpetas del servidor local (no deben subir)
+/vendor/
+
+# Archivos sensibles (configuración de BDD, credenciales si estuvieran fuera de db_connection)
+# /config.php
+
+# Archivos de sesión PHP
+*.session
+
+# Logs del sistema
+*.log
+
+# Archivos de sistema operativo y VS Code
+.DS_Store
+Thumbs.db
+/.vscode
