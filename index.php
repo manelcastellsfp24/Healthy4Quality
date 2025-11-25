@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
+
+<?php
 // Mostrar errores (para evitar pantallas en blanco)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -34,3 +42,4 @@ if (!method_exists($controller, $action)) {
 
 // 7. ejecutar la acción
 $controller->$action();
+?>

@@ -15,7 +15,14 @@
                     - <?= number_format($p['precio'], 2) ?> €
                     <br>
                     <em><?= htmlspecialchars($p['descripcion'] ?? '') ?></em>
+                    <br><br>
+
+                    <!-- BOTÓN AÑADIR AL CARRITO -->
+                    <a href="index.php?controller=carrito&action=add&id=<?= $p['id_producto'] ?>">
+                        🛒 Añadir al carrito
+                    </a>
                 </li>
+                <br>
             <?php endforeach; ?>
         </ul>
     <?php else: ?>
@@ -24,3 +31,4 @@
 
 </body>
 </html>
+
