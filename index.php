@@ -13,8 +13,9 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // 1. leer qué controlador y acción nos piden por la URL
-$controllerName = isset($_GET['controller']) ? $_GET['controller'] : 'producto';
-$action         = isset($_GET['action']) ? $_GET['action'] : 'lista';
+$controllerName = isset($_GET['controller']) ? $_GET['controller'] : 'pagina';
+$action         = isset($_GET['action']) ? $_GET['action'] : 'home';
+
 
 // 2. montar el nombre de la clase y el archivo
 $controllerClass = ucfirst($controllerName) . 'Controller'; // 'producto' -> 'ProductoController'

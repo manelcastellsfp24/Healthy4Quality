@@ -20,5 +20,24 @@ class Usuario {
         $stmt->execute([$email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    // obtener por id
+    public static function getById($id) {
+        $db = Database::conectar();
+        $stmt = $db->prepare("SELECT * FROM Usuario WHERE id_usuario = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // actualizar datos básicos
+    public static function actualizar($id, $nombre, $email, $telefono) {
+        $db = Database::conectar();
+        $stmt = $db->prepare(
+            "UPDATE Usuario
+             SET nombre = ?, email = ?, telefono = ?
+             WHERE id_usuario = ?"
+        );
+        return $stmt->execute([$nombre, $email, $telefono, $id]);
+    }
 }
 ?>
