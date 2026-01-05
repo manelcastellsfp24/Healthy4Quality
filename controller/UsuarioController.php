@@ -10,9 +10,14 @@ class UsuarioController {
     }
 
     public function save() {
-        $nombre = $_POST['nombre'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $nombre   = $_POST['nombre']   ?? '';
+        $email    = $_POST['email']    ?? '';
+        $password = $_POST['password'] ?? '';
+
+        if ($nombre === '' || $email === '' || $password === '') {
+            echo "Faltan datos. <a href='index.php?controller=usuario&action=registro'>Volver</a>";
+            return;
+        }
 
         Usuario::crear($nombre, $email, $password);
 
@@ -24,34 +29,54 @@ class UsuarioController {
     }
 
     public function auth() {
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?controller=usuario&action=login");
+            exit;
+        }
+    
+        $email    = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+    
+        if ($email === '' || $password === '') {
+            $_SESSION['error_login'] = "Has d'introduir l'email i la contrasenya.";
+            header("Location: index.php?controller=usuario&action=login");
+            exit;
+        }
+    
         $usuario = Usuario::getByEmail($email);
-
+    
         if ($usuario && password_verify($password, $usuario['contraseña'])) {
-
+    
             $_SESSION['usuario'] = [
-                "id" => $usuario['id_usuario'],
+                "id"     => $usuario['id_usuario'],
                 "nombre" => $usuario['nombre'],
-                "rol" => $usuario['rol']
+                "rol"    => $usuario['rol']
             ];
-
+    
+            unset($_SESSION['error_login']);
+    
             header("Location: index.php?controller=usuario&action=perfil");
-
+            exit;
+    
         } else {
-            echo "Credenciales incorrectas. <a href='index.php?controller=usuario&action=login'>Intentar de nuevo</a>";
+            $_SESSION['error_login'] = "Credenciales incorrectas.";
+            header("Location: index.php?controller=usuario&action=login");
+            exit;
         }
     }
+    
+    
 
     public function logout() {
         unset($_SESSION['usuario']);
         session_destroy();
         header("Location: index.php");
+        exit;
     }
 
-    // PANEL DE USUARIO
+    // PANEL DE USUARIO: PERFIL
     public function perfil() {
+        // Comprobar login
         if (!isset($_SESSION['usuario'])) {
             header("Location: index.php?controller=usuario&action=login");
             exit;
@@ -59,29 +84,36 @@ class UsuarioController {
 
         $id_usuario = $_SESSION['usuario']['id'];
 
-        // Datos del usuario
-        $usuario = Usuario::getById($id_usuario);
+        // Cargar datos del usuario
+        $usuarioDatos = Usuario::getById($id_usuario);
 
-        // Pedidos del usuario
-        $pedidos = Pedido::getByUsuario($id_usuario);
-
-        // Último pedido
-        $ultimoPedido = Pedido::getUltimoByUsuario($id_usuario);
+        // Cargar pedidos del usuario
+        $pedidosUsuario = Pedido::getByUsuario($id_usuario);
 
         require __DIR__ . '/../view/usuario/perfil.php';
     }
 
-    // actualizar datos desde el formulario del perfil
-    public function actualizar() {
+    // ACTUALIZAR DATOS DESDE EL FORMULARIO DEL PERFIL
+    public function actualizarPerfil() {
         if (!isset($_SESSION['usuario'])) {
             header("Location: index.php?controller=usuario&action=login");
             exit;
         }
 
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?controller=usuario&action=perfil");
+            exit;
+        }
+
         $id       = $_SESSION['usuario']['id'];
-        $nombre   = $_POST['nombre'];
-        $email    = $_POST['email'];
-        $telefono = $_POST['telefono'];
+        $nombre   = $_POST['nombre']   ?? '';
+        $email    = $_POST['email']    ?? '';
+        $telefono = $_POST['telefono'] ?? '';
+
+        if ($nombre === '' || $email === '') {
+            header("Location: index.php?controller=usuario&action=perfil");
+            exit;
+        }
 
         Usuario::actualizar($id, $nombre, $email, $telefono);
 
@@ -89,9 +121,10 @@ class UsuarioController {
         $_SESSION['usuario']['nombre'] = $nombre;
 
         header("Location: index.php?controller=usuario&action=perfil");
+        exit;
     }
 
-    // ver detalle de un pedido del usuario
+    // VER DETALLE DE UN PEDIDO DEL USUARIO
     public function verPedido() {
         if (!isset($_SESSION['usuario'])) {
             header("Location: index.php?controller=usuario&action=login");
@@ -116,3 +149,4 @@ class UsuarioController {
         require __DIR__ . '/../view/usuario/pedido.php';
     }
 }
+

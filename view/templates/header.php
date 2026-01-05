@@ -1,58 +1,113 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Contar productos del carrito
+$carritoCount = 0;
+if (!empty($_SESSION['carrito'])) {
+    foreach ($_SESSION['carrito'] as $item) {
+        $carritoCount += (int)$item['cantidad'];
+    }
+}
+
+$isLogged = isset($_SESSION['usuario']);
+$isAdmin  = $isLogged && ($_SESSION['usuario']['rol'] ?? '') === 'admin';
+
+// Detectar si estamos en HOME (sin controller o controller=home)
+$controller = $_GET['controller'] ?? null;
+$isHome = (!$controller) || ($controller === 'home');
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Healthy4Quality</title>
 
-    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Tu CSS -->
-    <link rel="stylesheet" href="/Healthy4Quality/assets/css/style.css">
+    <link rel="stylesheet" href="/Healthy4Quality/assets/style.css?v=<?= time() ?>">
+
 </head>
 <body>
 
-<header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top main-navbar">
+<header class="hq-header">
     <div class="container">
-        <a class="navbar-brand fw-bold logo" href="index.php">
-            Healthy<span>4</span>Quality
-        </a>
+        <div class="hq-nav">
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <!-- LOGO -->
+            <a class="hq-logo" href="index.php">
+                <img src="/Healthy4Quality/assets/img/Logo.svg" alt="Healthy4Quality" class="hq-logo-img">
+            </a>
 
-        <nav class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?controller=pagina&action=home#carta">Carta</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?controller=pagina&action=home#horario">Horario</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?controller=pagina&action=home#servicios">Servicios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?controller=pagina&action=home#contacto">Contacto</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-success nav-cta" href="index.php?controller=producto&action=lista">
-                        Hacer pedido
-                    </a>
-                </li>
-            </ul>
-        </nav>
+            <!-- CTA / ACCIONES -->
+            <div class="hq-actions">
+                <a class="hq-link" href="index.php?controller=producto&action=lista">Carta</a>
+                <!-- Carrito -->
+                <a class="hq-cart" href="index.php?controller=carrito&action=ver" title="Carrito">
+                    🛒
+                    <?php if ($carritoCount > 0): ?>
+                        <span class="hq-badge"><?= $carritoCount ?></span>
+                    <?php endif; ?>
+                </a>
+
+                <?php if ($isLogged): ?>
+
+                    <!-- Dropdown Mi cuenta -->
+                    <div class="dropdown">
+                        <button class="hq-link dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            Mi cuenta
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="index.php?controller=usuario&action=perfil">
+                                    Perfil
+                                </a>
+                            </li>
+
+                            <?php if ($isAdmin): ?>
+                                <li>
+                                    <a class="dropdown-item" href="index.php?controller=admin&action=panel">
+                                        Panel Admin
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <a class="dropdown-item text-danger" href="index.php?controller=usuario&action=logout">
+                                    Cerrar sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                <?php else: ?>
+                    <a class="hq-link" href="index.php?controller=usuario&action=login">Iniciar sesión</a>
+                <?php endif; ?>
+
+                <!-- CTA -->
+                <a class="hq-cta" href="index.php?controller=producto&action=lista">Hacer pedido</a>
+            </div>
+        </div>
     </div>
 </header>
 
-<main class="py-4">
-    <div class="container">
+<?php if ($isHome): ?>
+    <!-- HOME: sin container para permitir banner ancho completo -->
+    <main>
+<?php else: ?>
+    <!-- RESTO PÁGINAS: con container -->
+    <main class="py-4">
+        <div class="container">
+<?php endif; ?>

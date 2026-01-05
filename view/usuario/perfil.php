@@ -1,74 +1,75 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mi perfil</title>
-</head>
-<body>
+<?php include __DIR__ . '/../templates/header.php'; ?>
 
-<h1>Hola, <?= htmlspecialchars($usuario['nombre']) ?></h1>
+<section class="mb-5">
+    <h1 class="h3 fw-bold mb-3">Mi perfil</h1>
+    <p class="text-muted mb-4">Actualiza tus datos y revisa tu historial de pedidos.</p>
 
-<h2>Mis datos</h2>
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5 fw-bold mb-3">Datos personales</h2>
 
-<form action="index.php?controller=usuario&action=actualizar" method="POST">
-    Nombre: <input type="text" name="nombre" value="<?= htmlspecialchars($usuario['nombre']) ?>" required><br><br>
-    Email: <input type="email" name="email" value="<?= htmlspecialchars($usuario['email']) ?>" required><br><br>
-    Teléfono: <input type="text" name="telefono" value="<?= htmlspecialchars($usuario['telefono'] ?? '') ?>"><br><br>
+                    <form action="index.php?controller=usuario&action=actualizarPerfil" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" class="form-control" name="nombre"
+                                   value="<?= htmlspecialchars($usuarioDatos['nombre'] ?? '') ?>" required>
+                        </div>
 
-    <button type="submit">Guardar cambios</button>
-</form>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email"
+                                   value="<?= htmlspecialchars($usuarioDatos['email'] ?? '') ?>" required>
+                        </div>
 
-<hr>
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" name="telefono"
+                                   value="<?= htmlspecialchars($usuarioDatos['telefono'] ?? '') ?>">
+                        </div>
 
-<h2>Último pedido</h2>
+                        <button type="submit" class="btn btn-success">Guardar cambios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-<?php if ($ultimoPedido): ?>
-    <p>Nº pedido: <strong><?= $ultimoPedido['id_pedido'] ?></strong></p>
-    <p>Fecha: <?= $ultimoPedido['fecha'] ?></p>
-    <p>Total: <?= number_format($ultimoPedido['total'], 2) ?> €</p>
-    <p>Estado: <?= htmlspecialchars($ultimoPedido['estado']) ?></p>
-    <a href="index.php?controller=usuario&action=verPedido&id=<?= $ultimoPedido['id_pedido'] ?>">
-        Ver detalle
-    </a>
-<?php else: ?>
-    <p>Aún no has realizado ningún pedido.</p>
-<?php endif; ?>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5 fw-bold mb-3">Mis pedidos</h2>
 
-<hr>
+                    <?php if (!empty($pedidosUsuario)): ?>
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Fecha</th>
+                                        <th>Total</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach ($pedidosUsuario as $ped): ?>
+                                    <tr>
+                                        <td><?= $ped['id_pedido'] ?></td>
+                                        <td><?= $ped['fecha'] ?></td>
+                                        <td><?= number_format($ped['total'], 2) ?> €</td>
+                                        <td><?= htmlspecialchars($ped['estado']) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php else: ?>
+                        <p class="text-muted mb-0">Todavía no has realizado ningún pedido.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<h2>Todos mis pedidos</h2>
-
-<?php if (!empty($pedidos)): ?>
-    <table border="1" cellpadding="6">
-        <tr>
-            <th>Nº Pedido</th>
-            <th>Fecha</th>
-            <th>Total</th>
-            <th>Estado</th>
-            <th></th>
-        </tr>
-
-        <?php foreach ($pedidos as $p): ?>
-            <tr>
-                <td><?= $p['id_pedido'] ?></td>
-                <td><?= $p['fecha'] ?></td>
-                <td><?= number_format($p['total'], 2) ?> €</td>
-                <td><?= htmlspecialchars($p['estado']) ?></td>
-                <td>
-                    <a href="index.php?controller=usuario&action=verPedido&id=<?= $p['id_pedido'] ?>">
-                        Ver detalle
-                    </a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
-<?php else: ?>
-    <p>No tienes pedidos todavía.</p>
-<?php endif; ?>
-
-<br>
-<a href="index.php?controller=producto&action=lista">Volver a productos</a> |
-<a href="index.php?controller=usuario&action=logout">Cerrar sesión</a>
-
-</body>
-</html>
+<?php include __DIR__ . '/../templates/footer.php'; ?>

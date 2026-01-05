@@ -215,11 +215,12 @@ async function mostrarPedidos() {
     const datos = await respuesta.json();
 
     if (!Array.isArray(datos)) {
-    contenedor.innerHTML = "Error cargando pedidos.";
-    return;
+        contenedor.innerHTML = "Error cargando pedidos.";
+        console.error(datos);
+        return;
     }
 
-    //  convertimos cada pedido en instancia de PedidoAdmin
+    // Convertimos a objetos PedidoAdmin (si ya tienes la clase definida)
     let pedidos = datos.map(p => new PedidoAdmin(
         p.id_pedido,
         p.nombre_usuario,
@@ -228,33 +229,47 @@ async function mostrarPedidos() {
         p.estado
     ));
 
-
     // Recuperar filtros guardados en localStorage (si los hubiera)
     const filtrosGuardados = JSON.parse(localStorage.getItem("filtrosPedidos") || "{}");
 
     const htmlFiltros = `
-        <h2>Pedidos</h2>
+        <h2 class="h3 fw-bold mb-4">Pedidos</h2>
 
-        <div id="filtros">
-            <label>Usuario (nombre contiene): </label>
-            <input type="text" id="filtroUsuario" value="${filtrosGuardados.usuario || ""}"><br><br>
+        <div id="filtros" class="mb-4">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Usuario (contiene):</label>
+                    <input type="text" id="filtroUsuario" class="form-control"
+                        value="${filtrosGuardados.usuario || ""}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha desde:</label>
+                    <input type="date" id="filtroDesde" class="form-control"
+                        value="${filtrosGuardados.desde || ""}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha hasta:</label>
+                    <input type="date" id="filtroHasta" class="form-control"
+                        value="${filtrosGuardados.hasta || ""}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Total mínimo:</label>
+                    <input type="number" step="0.01" id="filtroMin" class="form-control"
+                        value="${filtrosGuardados.min || ""}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Total máximo:</label>
+                    <input type="number" step="0.01" id="filtroMax" class="form-control"
+                        value="${filtrosGuardados.max || ""}">
+                </div>
+            </div>
 
-            <label>Fecha desde:</label>
-            <input type="date" id="filtroDesde" value="${filtrosGuardados.desde || ""}"><br><br>
-
-            <label>Fecha hasta:</label>
-            <input type="date" id="filtroHasta" value="${filtrosGuardados.hasta || ""}"><br><br>
-
-            <label>Total mínimo:</label>
-            <input type="number" step="0.01" id="filtroMin" value="${filtrosGuardados.min || ""}"><br><br>
-
-            <label>Total máximo:</label>
-            <input type="number" step="0.01" id="filtroMax" value="${filtrosGuardados.max || ""}"><br><br>
-
-            <button id="btnAplicarFiltros">Aplicar filtros</button>
+            <button id="btnAplicarFiltros" class="btn btn-success btn-sm mt-3">
+                Aplicar filtros
+            </button>
         </div>
 
-        <div id="resumen"></div>
+        <div id="resumen" class="mb-3"></div>
         <div id="tablaPedidos"></div>
     `;
 
@@ -277,14 +292,12 @@ async function mostrarPedidos() {
         const min        = parseFloat(inputMin.value);
         const max        = parseFloat(inputMax.value);
 
-        // 1) filtro por usuario (nombre contiene)
         if (usuarioTxt) {
             filtrados = filtrados.filter(p =>
                 p.nombre_usuario.toLowerCase().includes(usuarioTxt)
             );
         }
 
-        // 2) fecha desde/hasta (asumiendo formato 'YYYY-MM-DD HH:MM:SS')
         if (desde) {
             filtrados = filtrados.filter(p =>
                 p.fecha >= desde
@@ -292,19 +305,17 @@ async function mostrarPedidos() {
         }
 
         if (hasta) {
-            // Para incluir el día completo, podrías sumar '23:59:59' en el backend.
             filtrados = filtrados.filter(p =>
                 p.fecha <= hasta + " 23:59:59"
             );
         }
 
-        // 3) total min/max
         if (!isNaN(min)) {
-            filtrados = filtrados.filter(p => parseFloat(p.total) >= min);
+            filtrados = filtrados.filter(p => p.total >= min);
         }
 
         if (!isNaN(max)) {
-            filtrados = filtrados.filter(p => parseFloat(p.total) <= max);
+            filtrados = filtrados.filter(p => p.total <= max);
         }
 
         // Guardar filtros en localStorage
@@ -317,9 +328,22 @@ async function mostrarPedidos() {
         };
         localStorage.setItem("filtrosPedidos", JSON.stringify(filtrosActuales));
 
-        // Mostrar tabla
-        let html = "<table border='1' cellpadding='6'>";
-        html += "<tr><th>ID</th><th>Usuario</th><th>Fecha</th><th>Total</th><th>Estado</th></tr>";
+        // Mostrar tabla con opciones de editar/eliminar
+        let html = `
+            <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
 
         filtrados.forEach(p => {
             html += `
@@ -327,29 +351,100 @@ async function mostrarPedidos() {
                     <td>${p.id_pedido}</td>
                     <td>${p.nombre_usuario}</td>
                     <td>${p.fecha}</td>
-                    <td>${p.total} €</td>
-                    <td>${p.estado}</td>
+                    <td>${p.total.toFixed(2)} €</td>
+                    <td>
+                        <select class="form-select form-select-sm estado-select" data-id="${p.id_pedido}">
+                            <option value="pendiente"   ${p.estado === "pendiente" ? "selected" : ""}>Pendiente</option>
+                            <option value="preparando"  ${p.estado === "preparando" ? "selected" : ""}>Preparando</option>
+                            <option value="enviado"     ${p.estado === "enviado" ? "selected" : ""}>Enviado</option>
+                            <option value="entregado"   ${p.estado === "entregado" ? "selected" : ""}>Entregado</option>
+                            <option value="cancelado"   ${p.estado === "cancelado" ? "selected" : ""}>Cancelado</option>
+                        </select>
+                    </td>
+                    <td class="text-end">
+                        <button class="btn btn-outline-success btn-sm me-1 btn-guardar-estado" data-id="${p.id_pedido}">
+                            Guardar estado
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm btn-eliminar-pedido" data-id="${p.id_pedido}">
+                            Eliminar
+                        </button>
+                    </td>
                 </tr>
             `;
         });
 
-        html += "</table>";
+        html += `
+                    </tbody>
+                </table>
+            </div>
+        `;
+
         divTabla.innerHTML = html;
 
-        // Mostrar resumen con reduce (total facturado)
-        const totalPedidos = filtrados.reduce((suma, p) => suma + parseFloat(p.total), 0);
+        // Resumen con reduce
+        const totalPedidos = filtrados.reduce((suma, p) => suma + p.total, 0);
         divResumen.innerHTML = `
             <p><strong>Nº pedidos:</strong> ${filtrados.length}</p>
             <p><strong>Total facturado (filtrado):</strong> ${totalPedidos.toFixed(2)} €</p>
         `;
+
+        // Añadir eventos a botones Guardar estado
+        document.querySelectorAll(".btn-guardar-estado").forEach(btn => {
+            btn.onclick = async () => {
+                const id = btn.dataset.id;
+                const select = divTabla.querySelector(`.estado-select[data-id="${id}"]`);
+                const nuevoEstado = select.value;
+
+                const datos = new FormData();
+                datos.append("accion", "actualizar");
+                datos.append("id_pedido", id);
+                datos.append("estado", nuevoEstado);
+
+                const res = await fetch("/Healthy4Quality/api/pedidos.php", {
+                    method: "POST",
+                    body: datos
+                });
+                const r = await res.json();
+
+                if (r.ok) {
+                    alert("Estado actualizado correctamente");
+                    mostrarPedidos(); // recargar lista
+                } else {
+                    alert("Error: " + r.error);
+                }
+            };
+        });
+
+        // Añadir eventos a botones Eliminar
+        document.querySelectorAll(".btn-eliminar-pedido").forEach(btn => {
+            btn.onclick = async () => {
+                const id = btn.dataset.id;
+                if (!confirm("¿Seguro que quieres eliminar el pedido " + id + "?")) return;
+
+                const datos = new FormData();
+                datos.append("accion", "eliminar");
+                datos.append("id_pedido", id);
+
+                const res = await fetch("/Healthy4Quality/api/pedidos.php", {
+                    method: "POST",
+                    body: datos
+                });
+                const r = await res.json();
+
+                if (r.ok) {
+                    alert("Pedido eliminado correctamente");
+                    mostrarPedidos();
+                } else {
+                    alert("Error: " + r.error);
+                }
+            };
+        });
     }
 
-    // Evento botón filtros
     document.getElementById("btnAplicarFiltros").onclick = aplicarFiltrosYMostrar;
-
-    // Mostrar tabla la primera vez
     aplicarFiltrosYMostrar();
 }
+
 
 async function mostrarConversionMoneda() {
     const contenedor = document.getElementById("contenido");

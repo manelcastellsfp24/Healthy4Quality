@@ -5,6 +5,14 @@ header("Content-Type: application/json");
 require_once __DIR__ . '/../model/Producto.php';
 require_once __DIR__ . '/../model/LogAccion.php';  // modelo de logs
 
+// Solo permitir acceso si el usuario es admin
+if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'admin') {
+    http_response_code(403);
+    echo json_encode(["ok" => false, "error" => "Acceso no autorizado (admin requerido)"]);
+    exit;
+}
+
+
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
@@ -102,6 +110,3 @@ if ($method === 'POST') {
         exit;
     }
 }
-
-
-

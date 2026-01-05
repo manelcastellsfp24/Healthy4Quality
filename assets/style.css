@@ -47,7 +47,46 @@ body {
 
 .hero-home {
     min-height: 70vh;
+    position: relative;
+    min-height: 70vh;
+    padding: 4rem 3rem;
+    background-image: url("/Healthy4Quality/assets/img/Banner.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    margin-bottom: 0;
+
 }
+
+.hero-title .hero-break{
+  display: block !important;
+}
+
+h1 {
+    color: #FCFCFC;
+    text-shadow:
+    0 2px 4px rgba(0,0,0,.6),
+    0 0 8px rgba(0,0,0,.4);
+}
+
+.lead {
+    color: #FCFCFC;
+    text-shadow:
+    0 2px 4px rgba(0,0,0,.6),
+    0 0 8px rgba(0,0,0,.4);
+}
+
+/*Botón ver carta*/
+.hero-btn-ver-carta {
+    border-color: #FCFCFC;
+    background-color: transparent;
+}
+.hero-btn-ver-carta:hover{
+    background-color: #FCFCFC;
+    color: #B73737;
+  }
 
 .hero-home h1 {
     font-weight: 700;
@@ -63,61 +102,324 @@ body {
     border: 1px solid #e5e7eb;
 }
 
-/* FORMULARIO HERO */
+/* ===== HERO FORM ===== */
 
-.hero-card .form-control {
+.hero-form{
+    background: #2C333A;
+    border-radius: 22px;
+    margin-top: 100px;
+  }
+  
+  /* Inputs */
+  .hero-input{
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,.35);
     border-radius: 999px;
-}
-
-.hero-card button.btn {
+    color: #fcfcfc;
+    padding: 12px 18px;
+    font-size: .95rem;
+  }
+  
+  .hero-input::placeholder{
+    color: rgba(255,255,255,.75);
+  }
+  
+  .hero-input:focus{
+    background: transparent;
+    border-color: #fcfcfc;
+    box-shadow: none;
+    color: #fcfcfc;
+  }
+  
+  /* Botón */
+  .hero-btn-submit{
+    background: #fcfcfc;
+    color: #B73737;
+    border: 2px solid #B73737;
     border-radius: 999px;
-    font-weight: 600;
-}
-
+    padding: 12px;
+    font-weight: 800;
+    letter-spacing: .3px;
+    transition: all .25s ease;
+  }
+  
+  .hero-btn-submit:hover{
+    background: #B73737;
+    color: #fcfcfc;
+    transform: translateY(-2px);
+  }
+  
 /* PRODUCTOS DESTACADOS */
-
-.producto-card {
-    border-radius: 1.5rem;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+.top-platos{
+    padding: 70px 0;
+    background: #111111;
+    margin-top: -50px;
+  }
+  
+  .top-platos-head{
+    position: relative;
+    text-align: center;
+    margin-bottom: 34px;
+  }
+  
+  .top-platos-bg{
+    font-weight: 900;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    font-size: clamp(42px, 7vw, 86px);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(255, 60, 60, .55); /* rojo contorno */
+    opacity: .85;
+  }
+  
+  .top-platos-title{
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: clamp(18px, 2.6vw, 28px);
+  }
+  
+  /* Cards */
+  .tp-card{
+    color: #fff;
+  }
+  
+  .tp-img{
+    width: 100%;
+    aspect-ratio: 1 / 1;      /* cuadrado 1:1 */
+    border-radius: 12px;
+    overflow: hidden;
+    background: #111;
+    box-shadow: 0 14px 34px rgba(0,0,0,.45);
+  }
+  
+  .tp-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .tp-name{
+    margin: 14px 0 6px;
+    font-size: 1.1rem;
+    font-weight: 800;
+  }
+  
+  .tp-desc{
+    margin: 0;
+    font-size: .82rem;
+    opacity: .85;
+    line-height: 1.35;
+  }
+  
+  /* Ajuste móvil */
+  @media (max-width: 576px){
+    .tp-name{ font-size: 1rem; }
+    .tp-desc{ font-size: .78rem; }
+  }
+  
+/* ====== OFERTAS Y DESCUENTOS ====== */
+.ofertas-sec{
+    padding: 60px 0 10px;
+    margin-bottom: 70px;
+  }
+  
+  .ofertas-head{
+    position: relative;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  
+  .ofertas-bg{
+    font-weight: 900;
+    font-size: clamp(52px, 7vw, 92px);
+    letter-spacing: 6px;
+    line-height: 1;
+    opacity: .95;
+  
+    /* outline rojo + interior transparente */
+    color: transparent;
+    -webkit-text-stroke: 2px #B73737;
+    text-transform: uppercase;
+  }
+  
+  .ofertas-title{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -35%);
+    margin: 0;
+  
+    color: #fcfcfc;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: clamp(18px, 2.4vw, 28px);
+  }
+  
+  /* Grid de tarjetas */
+.ofertas-grid{
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  align-items: stretch;
+  flex-wrap: wrap;
 }
 
-.producto-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+  
+  @media (max-width: 1200px){
+    .ofertas-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 768px){
+    .ofertas-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 480px){
+    .ofertas-grid{ grid-template-columns: 1fr; }
+  }
+  
+  .oferta-card{
+    width: 240px;          /* tamaño fijo */
+    min-height: 220px;
+    padding: 18px 16px;
+    border-radius: 0;
+    border: 1px solid #2C333A;
+    box-shadow: 0 10px 22px #111111;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+  }
+  
+  
+  .oferta-dark{
+    background: #111111;
+  }
+  
+  .oferta-red{
+    background: #B73737;
+  }
+  
+  /* Textos de la tarjeta */
+  .oferta-big{
+    margin: 0 0 10px;
+    font-size: 24px;
+    font-weight: 900;
+    color: #fcfcfc;
+    line-height: 1.15;
+  }
+  
+  .oferta-small{
+    margin: 0;
+    color: #fcfcfc;
+    font-size: 13px;
+    line-height: 1.35;
+    max-width: 240px;
+  }
+  
+/* ====== HORARIO RESTAURANTE ====== */
+.horario-sec{
+  padding: 70px 0 60px;
+  background-color: #111111;
 }
 
-.producto-card .card-body {
-    padding: 1.4rem 1.5rem;
+.horario-head{
+  position: relative;
+  text-align: center;
+  margin-bottom: 26px;
 }
 
-.producto-card h3 {
-    font-size: 1rem;
+.horario-bg{
+  font-weight: 900;
+  font-size: clamp(56px, 7vw, 98px);
+  letter-spacing: 6px;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 2px #B73737;
+  text-transform: uppercase;
+  opacity: .95;
 }
 
-.producto-card p.small {
-    font-size: 0.85rem;
+.horario-title{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -38%);
+  margin: 0;
+  color: #fcfcfc;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: clamp(18px, 2.4vw, 28px);
 }
 
-/* OFERTAS */
-
-.oferta-card {
-    border-radius: 1.4rem;
-    background: linear-gradient(135deg, #e6fffa, #f0fff4);
-    border: 1px solid #b2f5ea;
-    font-size: 0.9rem;
+.horario-sub{
+  margin: 12px 0 0;
+  color: rgba(255,255,255,.75);
+  font-size: 13px;
 }
 
-/* HORARIO */
+/* tabla */
+.horario-wrap{
+  overflow-x: auto;
+  padding: 10px 0 0;
+}
 
-.horario-table td,
-.horario-table th {
-    font-size: 0.85rem;
+.horario-table2{
+  width: 100%;
+  min-width: 920px; /* para que en móvil haga scroll horizontal como toca */
+  border-collapse: collapse;
+  background: #8f8f8f;
+  border: 1px solid rgba(255,255,255,.25);
+}
+
+.horario-table2 thead th{
+  background: #B73737;
+  color: #111111;
+  font-weight: 800;
+  text-transform: capitalize;
+  padding: 12px 10px;
+  font-size: 12px;
+  border: 1px solid #FCFCFC;
+  text-align: center;
+}
+
+.horario-table2 tbody td{
+  background: #8f8f8f;
+  color: #fff;
+  padding: 16px 10px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.35);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.horario-table2 tbody td strong{
+  display:block;
+  font-size: 11px;
+  letter-spacing: .5px;
+  opacity: .95;
+}
+
+.horario-table2 tbody td span{
+  display:block;
+  margin-top: 6px;
+  font-size: 11px;
+  opacity: .95;
 }
 
 /* FOOTER */
 
 footer {
     font-size: 0.85rem;
+    margin-top: 0 !important;
 }
 
 /* CARTA / PRODUCTOS */
@@ -140,7 +442,447 @@ footer {
     font-size: 1.05rem;
 }
 
+/* CARRITO */
 
+.carrito-card,
+.resumen-carrito-card {
+    border-radius: 1.5rem;
+}
 
+.resumen-carrito-card .btn {
+    border-radius: 999px;
+}
 
+/* CARRITO EN NAVBAR */
 
+.carrito-link {
+    font-weight: 500;
+}
+
+.carrito-badge {
+    position: absolute;
+    top: 0;
+    right: -0.4rem;
+    background-color: #e74c3c;
+    color: white;
+    font-size: 0.7rem;
+    border-radius: 999px;
+    padding: 0.1rem 0.4rem;
+    min-width: 1.1rem;
+    text-align: center;
+}
+
+body{
+    background: #2b333b;
+  }
+  
+  .carta-hero{
+    padding: 14px 0;
+  }
+  
+  .carta-title{
+    color:#fcfcfc;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin: 0 0 6px;
+  }
+  
+  .carta-subtitle{
+    color: rgba(255,255,255,.75);
+  }
+  
+  .carta-btn{
+    border-radius: 999px;
+  }
+  
+  /* Secciones */
+  .menu-section{
+    margin: 28px 0 40px;
+  }
+  
+  .menu-section-title{
+    color:#fff;
+    font-weight: 700;
+    margin-bottom: 16px;
+    opacity: .95;
+  }
+  
+  /* Grid */
+  .menu-grid{
+    display:grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 26px;
+  }
+  
+  @media (max-width: 992px){
+    .menu-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 576px){
+    .menu-grid{ grid-template-columns: 1fr; }
+  }
+  
+  /* Card */
+  .menu-card{
+    background: rgba(20, 25, 30, .85);
+    border-radius: 14px;
+    overflow:hidden;
+    box-shadow: 0 10px 26px rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.06);
+  }
+  
+  .menu-card-img img{
+    width:100%;
+    height: 200px;
+    object-fit: contain;
+    background: #15191C;
+  }
+  
+  .menu-card-body{
+    padding: 14px 14px 16px;
+    color:#fff;
+  }
+  
+  .menu-card-name{
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  
+  .menu-card-desc{
+    font-size: .86rem;
+    opacity: .8;
+    margin: 0 0 10px;
+    min-height: 40px;
+  }
+  
+  .menu-card-price{
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  
+  /* Cantidad */
+  .qty{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+    background: #111111;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 999px;
+    padding: 8px 10px;
+  }
+  
+  .qty-btn{
+    width: 36px;
+    height: 30px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(255,255,255,.06);
+    color: #fff;
+    font-weight: 800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    cursor:pointer;
+  }
+  
+  .qty-value{
+    min-width: 18px;
+    text-align:center;
+    font-weight: 700;
+    opacity: .9;
+  }
+  
+  .qty-btn-plus{
+    background: #B73737;
+    border: #B73737;
+    color: #fcfcfc;
+  }
+
+  /* ====== FOOTER (Healthy4Quality) ====== */
+.hq-footer{
+    margin-top: 60px;
+  }
+  
+  .hq-footer-top{
+    background: #2f363d; /* gris oscuro del diseño */
+    padding: 48px 0;
+    color: rgba(255,255,255,.9);
+  }
+  
+  .hq-footer-grid{
+    display: grid;
+    grid-template-columns: 1.2fr 1fr .8fr;
+    gap: 28px;
+    align-items: start;
+  }
+  
+  @media (max-width: 992px){
+    .hq-footer-grid{
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Columna 1 */
+  .hq-footer-logo{
+    font-weight: 900;
+    letter-spacing: .5px;
+    font-size: 22px;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+  
+  .hq-footer-text{
+    max-width: 420px;
+    margin: 0;
+    opacity: .85;
+    line-height: 1.5;
+    margin-top: 30px;
+  }
+  
+  /* Columna 2 */
+  .hq-footer-title{
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 14px;
+    color: #fff;
+  }
+  
+  .hq-footer-hours{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+  }
+  
+  .hq-footer-hours li{
+    display: grid;
+    gap: 2px;
+  }
+  
+  .hq-footer-day{
+    font-weight: 700;
+    opacity: .95;
+  }
+  
+  .hq-footer-time{
+    opacity: .85;
+  }
+  
+  /* Columna 3 */
+  .hq-footer-icons{
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  @media (max-width: 992px){
+    .hq-footer-icons{
+      justify-content: flex-start;
+    }
+  }
+  
+  .hq-icon-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 44px);
+    gap: 12px;
+  }
+  
+  .hq-icon{
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    border: 1px solid rgba(255,255,255,.55);
+    color: #fcfcfc;
+    text-decoration: none;
+    border-radius: 6px;
+  
+    font-size: 18px;
+    background: #FCFCFC;
+  }
+  
+  /* Barra inferior */
+  .hq-footer-bottom{
+    background: #9a7d5a; /* marrón/beige del diseño */
+    padding: 18px 0;
+    color: #fff;
+  }
+  
+  .hq-footer-copy{
+    text-align: center;
+    font-weight: 600;
+    opacity: .95;
+  }
+
+  @media (min-width: 992px){
+    .hq-footer-col:nth-child(2){
+      border-left: 1px solid rgba(255,255,255,.25);
+      padding-left: 24px;
+    }
+  }
+
+  .hq-icon:hover{
+    transform: translateY(-2px);
+    transition: .2s ease;
+  }
+
+  @media (max-width: 992px){
+    .hq-footer-col{
+      text-align: center;
+    }
+    .hq-footer-icons{
+      justify-content: center;
+    }
+  }
+
+  /* ====== HEADER ====== */
+.hq-header{
+    background:2C333A;
+    padding: 18px 0;
+  }
+  
+  .hq-nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 18px;
+  }
+  
+  .hq-logo img{
+    height: 80px;
+    width: auto;
+    display:block;
+  }
+  
+  /* Menú centrado */
+  .hq-menu{
+    display:flex;
+    gap: 28px;
+    align-items:center;
+    justify-content:center;
+    flex: 1;
+  }
+  
+  .hq-link{
+    color: rgba(255,255,255,.92);
+    text-decoration:none;
+    font-weight: 700;
+    letter-spacing: .2px;
+  }
+  
+  .hq-link:hover{
+    color: #fff;
+    opacity: .9;
+  }
+  
+  /* Enlace pill (Servicios marcado) */
+  .hq-link-pill{
+    border: 2px solid rgba(255, 60, 60, .7);
+    padding: 6px 14px;
+    border-radius: 999px;
+  }
+  
+  /* Derecha: acciones */
+  .hq-actions{
+    display:flex;
+    align-items:center;
+    gap: 16px;
+  }
+  
+  /* Botón Hacer pedido */
+  .hq-cta{
+    background:#fff;
+    color:#B73737;
+    border-color: #B73737;
+    border: 2px solid #B73737;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 800;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+  
+  .hq-cta:hover{
+    opacity:.92;
+  }
+  
+  /* Carrito + badge */
+  .hq-cart{
+    position: relative;
+    color:#fff;
+    text-decoration:none;
+    font-size: 18px;
+  }
+  
+  .hq-badge{
+    position:absolute;
+    top: -10px;
+    right: -12px;
+    background:#ff3b3b;
+    color:#fff;
+    border-radius:999px;
+    font-size: 12px;
+    padding: 2px 7px;
+    font-weight: 800;
+  }
+  
+  /* Logout rojo */
+  .hq-link-danger{
+    color: #ff6b6b;
+  }
+  .hq-link-danger:hover{
+    color:#ff8080;
+  }
+  
+  /* Responsive: ocultar menú en móvil */
+  @media (max-width: 992px){
+    .hq-menu{ display:none; }
+  }
+
+/* ===== Dropdown del header (forzar sobre Bootstrap) ===== */
+header.hq-header .dropdown-menu{
+    background: #2f363d !important;
+    border: 1px solid rgba(255,255,255,.18) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 12px 30px rgba(0,0,0,.35) !important;
+    padding: 8px !important;
+    min-width: 190px;
+  }
+  
+  header.hq-header .dropdown-item{
+    color: rgba(255,255,255,.92) !important;
+    border-radius: 8px !important;
+    padding: 10px 12px !important;
+    font-weight: 600;
+  }
+  
+  header.hq-header .dropdown-item:hover,
+  header.hq-header .dropdown-item:focus{
+    background: rgba(255,255,255,.08) !important;
+    color: #fff !important;
+  }
+  
+  header.hq-header .dropdown-divider{
+    border-top: 1px solid rgba(255,255,255,.18) !important;
+    margin: 6px 0 !important;
+  }
+  
+  /* El botón "Mi cuenta" (dropdown-toggle) en blanco */
+  header.hq-header .dropdown-toggle{
+    background: transparent !important;
+    border: 0 !important;
+    color: rgba(255,255,255,.92) !important;
+    font-weight: 700 !important;
+    padding: 0 !important;
+  }
+  
+  /* Quitar el fondo azul al hacer click */
+  header.hq-header .dropdown-toggle:focus{
+    box-shadow: none !important;
+  }

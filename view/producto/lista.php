@@ -1,60 +1,77 @@
 <?php include __DIR__ . '/../templates/header.php'; ?>
 
-<section class="mb-4">
-    <div class="row align-items-center">
-        <div class="col-md-8">
-            <h1 class="h2 fw-bold mb-2">Nuestra carta</h1>
-            <p class="text-muted mb-0">
-                Elige tus bowls, ensaladas y platos favoritos. Puedes añadirlos directamente al carrito.
-            </p>
+<?php
+// Agrupar por nombre de categoría
+$secciones = [];
+
+if (!empty($productos)) {
+    foreach ($productos as $p) {
+        $cat = $p['nombre_categoria'] ?? 'Sin categoría';
+        $secciones[$cat][] = $p;
+    }
+}
+?>
+
+<section class="carta-hero mb-4">
+    <div class="d-flex flex-column flex-lg-row align-items-lg-end justify-content-between gap-3">
+        <div>
+            <h1 class="carta-title">CARTA</h1>
         </div>
-        <div class="col-md-4 text-md-end mt-3 mt-md-0">
-            <a href="index.php?controller=carrito&action=ver" class="btn btn-outline-success">
-                Ver carrito
-            </a>
-        </div>
+        <a href="index.php?controller=carrito&action=ver" class="btn btn-outline-light carta-btn">
+            Ver carrito
+        </a>
     </div>
 </section>
 
 <?php if (!empty($productos)): ?>
-    <section class="mb-5">
-        <div class="row g-4">
-            <?php foreach ($productos as $p): ?>
-                <div class="col-sm-6 col-lg-4">
-                    <div class="card h-100 border-0 shadow-sm producto-card">
-                        <div class="card-body d-flex flex-column">
-                            <h2 class="h5 fw-bold mb-2">
-                                <?= htmlspecialchars($p['nombre']) ?>
-                            </h2>
 
-                            <?php if (!empty($p['descripcion'])): ?>
-                                <p class="small flex-grow-1 mb-2">
-                                    <?= htmlspecialchars($p['descripcion']) ?>
-                                </p>
-                            <?php else: ?>
-                                <p class="small flex-grow-1 mb-2 text-muted">
-                                    Plato saludable de la casa.
-                                </p>
-                            <?php endif; ?>
+    <?php foreach ($secciones as $nombreSeccion => $items): ?>
+        <section class="menu-section">
+            <h2 class="menu-section-title"><?= htmlspecialchars($nombreSeccion) ?></h2>
 
-                            <p class="fw-bold text-success fs-5 mb-3">
-                                <?= number_format($p['precio'], 2) ?> €
+            <div class="menu-grid">
+                <?php foreach ($items as $p): ?>
+                    <article class="menu-card">
+                        <div class="menu-card-img">
+                            <?php
+                                $imgFile = !empty($p['imagen']) ? $p['imagen'] : 'placeholder.jpg';
+                                $imgPath = "/Healthy4Quality/assets/img/" . $imgFile;
+                            ?>
+                            <img src="<?= htmlspecialchars($imgPath) ?>" alt="<?= htmlspecialchars($p['nombre']) ?>">
+                        </div>
+
+                        <div class="menu-card-body">
+                            <h3 class="menu-card-name"><?= htmlspecialchars($p['nombre']) ?></h3>
+
+                            <p class="menu-card-desc">
+                                <?= htmlspecialchars($p['descripcion'] ?? 'Plato saludable de la casa.') ?>
                             </p>
 
-                            <a href="index.php?controller=carrito&action=add&id=<?= $p['id_producto'] ?>"
-                               class="btn btn-success w-100 mt-auto">
-                                Añadir al carrito
-                            </a>
+                            <div class="menu-card-price">
+                                <?= number_format((float)$p['precio'], 2) ?>€
+                            </div>
+
+                            <div class="qty">
+                                <button class="qty-btn" type="button" disabled title="Opcional">–</button>
+                                <span class="qty-value">0</span>
+
+                                <a class="qty-btn qty-btn-plus"
+                                   href="index.php?controller=carrito&action=add&id=<?= $p['id_producto'] ?>">
+                                    +
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </section>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </section>
+    <?php endforeach; ?>
+
 <?php else: ?>
-    <p>No hay productos disponibles en este momento.</p>
+    <div class="alert alert-light">No hay productos disponibles en este momento.</div>
 <?php endif; ?>
 
 <?php include __DIR__ . '/../templates/footer.php'; ?>
+
 
 

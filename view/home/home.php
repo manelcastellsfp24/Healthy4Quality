@@ -1,152 +1,235 @@
 <?php include __DIR__ . '/../templates/header.php'; ?>
 
 <!-- HERO PRINCIPAL -->
-<section id="hero" class="hero-home row align-items-center mb-5">
+<section id="hero" class="hero-home mb-5">
+  <div class="container">
+    <div class="row align-items-center hero-inner">
 
-    <div class="col-lg-6 mb-4 mb-lg-0">
-        <h1 class="display-4 fw-bold mb-3">
-            Energía que se come
+      <!-- TEXTO IZQUIERDA -->
+      <div class="col-lg-6 mb-4 mb-lg-0 hero-text">
+        <h1 class="display-4 fw-bold mb-3 hero-title">
+          Energía que <span class="hero-break">se come</span>
         </h1>
 
         <p class="lead mb-4">
-            Bowls, ensaladas y platos saludables para que te cuides sin renunciar al sabor.
+          Comida saludable con actitud: real, fresca y con el punto justo de intensidad para tu día.
+          Preparada para llevar o disfrutar en sala.
         </p>
 
-        <a href="index.php?controller=producto&action=lista" class="btn btn-success btn-lg me-2">
-            Ver carta
+        <a href="index.php?controller=producto&action=lista"
+           class="btn btn-success btn-lg me-2 hero-btn-ver-carta">
+          Ver carta
         </a>
+      </div>
 
-        <a href="index.php?controller=carrito&action=ver" class="btn btn-outline-success btn-lg">
-            Ver carrito
-        </a>
-    </div>
+      <!-- FORMULARIO DERECHA -->
+      <div class="col-lg-6 d-flex justify-content-lg-end">
+        <div class="hero-card hero-form p-4 p-md-5 rounded-4 shadow-lg">
 
-    <!-- TARJETA FORMULARIO DEL HERO -->
-    <div class="col-lg-6">
-        <div class="hero-card p-4 p-md-5 rounded-4 shadow-sm bg-white">
-            <h2 class="h4 fw-bold mb-3">Haz tu pedido</h2>
-            <p class="small text-muted mb-3">Primera bebida gratuita con tu primer pedido online.</p>
+          <h2 class="h5 fw-bold mb-2 text-white text-center">
+            Primera bebida gratuita
+          </h2>
 
-            <form>
-                <div class="mb-3">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" class="form-control" placeholder="Tu nombre">
-                </div>
+          <form>
+            <div class="mb-3">
+              <input type="text" class="form-control hero-input" placeholder="Nombre*">
+            </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-control" placeholder="tucorreo@email.com">
-                </div>
+            <div class="mb-3">
+              <input type="email" class="form-control hero-input" placeholder="Email*">
+            </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Teléfono</label>
-                    <input type="tel" class="form-control" placeholder="600 000 000">
-                </div>
+            <div class="mb-4">
+              <input type="tel" class="form-control hero-input" placeholder="Teléfono*">
+            </div>
 
-                <button type="button"
-                        onclick="window.location.href='index.php?controller=producto&action=lista'"
-                        class="btn btn-success w-100">
-                    Hacer pedido
-                </button>
-            </form>
+            <button type="button"
+                    onclick="window.location.href='index.php?controller=producto&action=lista'"
+                    class="hero-btn-submit w-100">
+              Hacer pedido
+            </button>
+          </form>
+
         </div>
+      </div>
+
     </div>
+  </div>
 </section>
 
-<!-- PLATOS DESTACADOS (DINÁMICO) -->
-<section id="carta" class="mb-5">
-    <h2 class="h3 fw-bold mb-4">Platos destacados</h2>
-
+<!-- PLATOS DESTACADOS -->
+<section id="carta" class="top-platos">
+  <div class="container">
+    <!-- TÍTULOS -->
+    <div class="top-platos-head">
+      <div class="top-platos-bg">TOP PLATOS</div>
+      <h2 class="top-platos-title">PLATOS DESTACADOS</h2>
+    </div>
     <?php if (!empty($productosDestacados)): ?>
-        <div class="row g-4">
+      <div class="row g-4">
+        <?php foreach ($productosDestacados as $p): ?>
+          <div class="col-6 col-lg-3">
+            <article class="tp-card">
+              <div class="tp-img">
+              <?php
+$img = $p['imagen'] ?? '';
 
-            <?php foreach ($productosDestacados as $p): ?>
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 border-0 shadow-sm producto-card">
-                        <div class="card-body d-flex flex-column">
+// Si está vacío -> fallback
+if (!$img) {
+  $img = '/Healthy4Quality/assets/img/Salmon.png';
+}
 
-                            <h3 class="h5 fw-bold mb-2">
-                                <?= htmlspecialchars($p['nombre']) ?>
-                            </h3>
+// Si guardas solo "Salmon.png" o "bowl.jpg"
+else if (!str_contains($img, '/')) {
+  $img = '/Healthy4Quality/assets/img/' . $img;
+}
 
-                            <p class="small flex-grow-1">
-                                <?= htmlspecialchars($p['descripcion'] ?? '') ?>
-                            </p>
+// Si guardas "assets/img/bowl.jpg"
+else if (str_starts_with($img, 'assets/')) {
+  $img = '/Healthy4Quality/' . $img;
+}
 
-                            <p class="fw-bold text-success mb-3">
-                                <?= number_format($p['precio'], 2) ?> €
-                            </p>
+// Si guardas "/assets/img/bowl.jpg"
+else if (str_starts_with($img, '/assets/')) {
+  $img = '/Healthy4Quality' . $img;
+}
+?>
 
-                            <a href="index.php?controller=carrito&action=add&id=<?= $p['id_producto'] ?>"
-                               class="btn btn-success btn-sm mt-auto w-100">
-                                Añadir al carrito
-                            </a>
+<img src="<?= htmlspecialchars($img) ?>"
+     alt="<?= htmlspecialchars($p['nombre']) ?>"
+     loading="lazy">
 
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-
-        </div>
+              </div>
+              <h3 class="tp-name"><?= htmlspecialchars($p['nombre']) ?></h3>
+              <p class="tp-desc">
+                <?= htmlspecialchars($p['descripcion'] ?? '') ?>
+              </p>
+            </article>
+          </div>
+        <?php endforeach; ?>
+      </div>
     <?php else: ?>
-        <p>No hay productos destacados todavía.</p>
+      <p class="text-white-50">No hay productos destacados todavía.</p>
     <?php endif; ?>
+  </div>
 </section>
 
-<!-- OFERTAS (DINÁMICO) -->
-<section id="servicios" class="mb-5">
-    <h2 class="h3 fw-bold mb-4">Ofertas y descuentos</h2>
+<!-- OFERTAS -->
+<section id="servicios" class="ofertas-sec">
+  <div class="container">
 
-    <?php if (!empty($ofertas)): ?>
-        <div class="row g-3">
+    <div class="ofertas-head">
+      <div class="ofertas-bg">DESCUENTOS</div>
+      <h2 class="ofertas-title">OFERTAS Y DESCUENTOS</h2>
+    </div>
 
-            <?php foreach ($ofertas as $of): ?>
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="oferta-card p-3 rounded-4 h-100">
-                        <p class="small text-uppercase fw-bold mb-1 text-muted">
-                            <?= htmlspecialchars($of['tipo']) ?>
-                        </p>
+    <div class="ofertas-grid">
 
-                        <h3 class="h5 fw-bold mb-1">
-                            <?= htmlspecialchars($of['nombre']) ?>
-                        </h3>
+      <?php
+      // Si no hay ofertas en BD, usamos fallback
+      if (empty($ofertas)) {
+        $ofertas = [
+          ["nombre" => "3X2", "descripcion" => "Compra 3 bowls y paga 2"],
+          ["nombre" => "1 bebida gratis", "descripcion" => "En tu primer pedido"],
+          ["nombre" => "Healthy lunch 15%", "descripcion" => "Si vienes a la hora del almuerzo toda la carta al 15% de descuento"],
+        ];
+      }
 
-                        <p class="mb-0">
-                            <?= htmlspecialchars($of['valor']) ?>
-                        </p>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+      $i = 0;
+      foreach ($ofertas as $of):
+        $i++;
 
-        </div>
-    <?php else: ?>
-        <p>No hay ofertas activas en este momento.</p>
-    <?php endif; ?>
+        // rojo - negro - rojo (1 y 3 rojo, 2 negro)
+        $claseColor = ($i % 2 === 0) ? "oferta-dark" : "oferta-red";
+
+        $titulo = $of["nombre"] ?? "";
+        $texto  = $of["descripcion"] ?? ($of["valor"] ?? "");
+      ?>
+        <article class="oferta-card <?= $claseColor ?>">
+          <h3 class="oferta-big"><?= htmlspecialchars($titulo) ?></h3>
+          <p class="oferta-small"><?= htmlspecialchars($texto) ?></p>
+        </article>
+      <?php endforeach; ?>
+
+    </div>
+
+  </div>
 </section>
 
-<!-- HORARIO (ESTÁTICO) -->
-<section id="horario" class="mb-5">
-    <h2 class="h3 fw-bold mb-4">Horario del restaurante</h2>
+<!-- Horario Restaurante -->
+<section id="horario" class="horario-sec">
+  <div class="container">
 
-    <div class="table-responsive">
-        <table class="table table-sm align-middle horario-table">
+    <div class="horario-head">
+      <div class="horario-bg">HORARIO</div>
+      <h2 class="horario-title">HORARIO RESTAURANTE</h2>
+      <p class="horario-sub">Todo nuestro horario de lunes a sábado, domingo cerrado</p>
+    </div>
 
-            <thead class="table-light">
-                <tr>
-                    <th>Día</th>
-                    <th>Desayuno</th>
-                    <th>Almuerzo</th>
-                    <th>Comida</th>
-                    <th>Merienda</th>
-                    <th>Cena</th>
-                </tr>
-            </thead>
+    <div class="horario-wrap">
+      <table class="horario-table2">
+        <thead>
+          <tr>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miércoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+            <th>Sábado</th>
+          </tr>
+        </thead>
 
-            <tbody>
-                <tr>
-                    <td>Lunes - Viernes</td>
-                    <td>08:00 - 11:00</td>
-                    <td>11:30 - 13:00</td>
-                    <td>13:00 - 16:00</td>
-                    <td>16:30 - 1
+        <tbody>
+          <tr>
+            <td><strong>DESAYUNO</strong><br><span>7:00am - 9:00am</span></td>
+            <td><strong>DESAYUNO</strong><br><span>7:00am - 9:00am</span></td>
+            <td><strong>DESAYUNO</strong><br><span>7:00am - 9:00am</span></td>
+            <td><strong>DESAYUNO</strong><br><span>7:00am - 9:00am</span></td>
+            <td><strong>DESAYUNO</strong><br><span>7:00am - 9:00am</span></td>
+            <td><strong>DESAYUNO</strong><br><span>9:00am - 11:00am</span></td>
+          </tr>
 
+          <tr>
+            <td><strong>ALMUERZO</strong><br><span>9:00am - 12:00am</span></td>
+            <td><strong>ALMUERZO</strong><br><span>9:00am - 12:00am</span></td>
+            <td><strong>ALMUERZO</strong><br><span>9:00am - 12:00am</span></td>
+            <td><strong>ALMUERZO</strong><br><span>9:00am - 12:00am</span></td>
+            <td><strong>ALMUERZO</strong><br><span>9:00am - 12:00am</span></td>
+            <td><strong>ALMUERZO</strong><br><span>11:00am - 1:00am</span></td>
+          </tr>
+
+          <tr>
+            <td><strong>COMIDA</strong><br><span>1:00pm - 4:00pm</span></td>
+            <td><strong>COMIDA</strong><br><span>1:00pm - 4:00pm</span></td>
+            <td><strong>COMIDA</strong><br><span>1:00pm - 4:00pm</span></td>
+            <td><strong>COMIDA</strong><br><span>1:00pm - 4:00pm</span></td>
+            <td><strong>COMIDA</strong><br><span>1:00pm - 4:00pm</span></td>
+            <td><strong>COMIDA</strong><br><span>1:00pm - 4:00pm</span></td>
+          </tr>
+
+          <tr>
+            <td><strong>MERIENDA</strong><br><span>5:00pm - 7:00pm</span></td>
+            <td><strong>MERIENDA</strong><br><span>5:00pm - 7:00pm</span></td>
+            <td><strong>MERIENDA</strong><br><span>5:00pm - 7:00pm</span></td>
+            <td><strong>MERIENDA</strong><br><span>5:00pm - 7:00pm</span></td>
+            <td><strong>MERIENDA</strong><br><span>5:00pm - 8:00pm</span></td>
+            <td><strong>MERIENDA</strong><br><span>5:00pm - 8:00pm</span></td>
+          </tr>
+
+          <tr>
+            <td><strong>CENA</strong><br><span>8:00pm - 10:30pm</span></td>
+            <td><strong>CENA</strong><br><span>8:00pm-10:30pm</span></td>
+            <td><strong>CENA</strong><br><span>8:00pm-10:30pm</span></td>
+            <td><strong>CENA</strong><br><span>8:00pm-10:30pm</span></td>
+            <td><strong>CENA</strong><br><span>9:00pm-12:30pm</span></td>
+            <td><strong>CENA</strong><br><span>9:00pm-12:30pm</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+
+<?php include __DIR__ . '/../templates/footer.php'; ?>

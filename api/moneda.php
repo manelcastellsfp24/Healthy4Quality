@@ -1,11 +1,22 @@
 <?php
+session_start();
 header("Content-Type: application/json");
 
-//AQUÍ MI API KEY
+// Solo admins
+if (!isset($_SESSION['usuario']) || ($_SESSION['usuario']['rol'] ?? '') !== 'admin') {
+    http_response_code(403);
+    echo json_encode([
+        "ok" => false,
+        "error" => "Acceso no autorizado (admin requerido)"
+    ]);
+    exit;
+}
+
+// API KEY
 $apiKey = "fca_live_91V8jIwQbCxVbEkNtlFuUAt1jm1yXKgjIIBa1Hvw";
 
 $base = "EUR";
-// Monedas a convertir (puedes añadir más)
+// Monedas a convertir
 $currencies = "USD,GBP,JPY";
 
 // URL de la API externa
@@ -21,5 +32,5 @@ if ($response === false) {
     exit;
 }
 
-// Simplemente devolvemos lo que nos da la API externa
+// Devolvemos directamente la respuesta de la API externa
 echo $response;
