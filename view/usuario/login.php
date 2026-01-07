@@ -1,36 +1,49 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Iniciar sesión</title>
-</head>
-<body>
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+?>
 
-<h1>Login</h1>
+<?php include __DIR__ . '/../templates/header.php'; ?>
 
-<?php if (!empty($_SESSION['error_login'])): ?>
-    <div class="alert alert-danger">
-        <?= htmlspecialchars($_SESSION['error_login']) ?>
+<section class="auth-page">
+  <div class="auth-wrap">
+    <div class="auth-card">
+
+      <h1 class="auth-title">Iniciar sesión</h1>
+      <p class="auth-subtitle">Accede para ver tu perfil y finalizar pedidos.</p>
+
+      <?php if (!empty($_SESSION['error_login'])): ?>
+        <div class="auth-alert">
+          <?= htmlspecialchars($_SESSION['error_login']) ?>
+        </div>
+        <?php unset($_SESSION['error_login']); ?>
+      <?php endif; ?>
+
+      <form action="index.php?controller=usuario&action=auth" method="POST" class="auth-form">
+
+        <div class="auth-field">
+          <label class="auth-label">Email</label>
+          <input type="email" name="email" class="auth-input" placeholder="tucorreo@email.com" required>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-label">Contraseña</label>
+          <input type="password" name="password" class="auth-input" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="auth-btn-primary">Entrar</button>
+
+        <div class="auth-divider"></div>
+
+        <p class="auth-small">¿No tienes cuenta?</p>
+
+        <a href="index.php?controller=usuario&action=registro" class="auth-btn-secondary">
+          Registrarme
+        </a>
+
+      </form>
+
     </div>
-    <?php unset($_SESSION['error_login']); ?>
-<?php endif; ?>
+  </div>
+</section>
 
-
-<form action="index.php?controller=usuario&action=auth" method="POST">
-    Email: <input type="email" name="email" required><br><br>
-    Contraseña: <input type="password" name="password" required><br><br>
-    <button type="submit">Entrar</button>
-</form>
-<div class="text-center mt-3">
-  <p class="mb-2">¿No tienes cuenta?</p>
-
-    <a href="index.php?controller=usuario&action=registro"
-    class="btn btn-outline-danger w-100 fw-bold">
-    Registrarme
-    </a>
-
-</div>
-
-
-</body>
-</html>
+<?php include __DIR__ . '/../templates/footer.php'; ?>

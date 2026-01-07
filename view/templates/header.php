@@ -14,9 +14,27 @@ if (!empty($_SESSION['carrito'])) {
 $isLogged = isset($_SESSION['usuario']);
 $isAdmin  = $isLogged && ($_SESSION['usuario']['rol'] ?? '') === 'admin';
 
-// Detectar si estamos en HOME (sin controller o controller=home)
+// Detectar controller/action
 $controller = $_GET['controller'] ?? null;
+$action     = $_GET['action'] ?? null;
+
+// Detectar si estamos en HOME (sin controller o controller=home)
 $isHome = (!$controller) || ($controller === 'home');
+
+// Clase por página (para CSS específico)
+$pageClass = '';
+if ($controller === 'carrito') {
+    $pageClass = 'carrito-page';
+} elseif ($controller === 'usuario' && in_array($action, ['login', 'registro', 'auth'], true)) {
+    $pageClass = 'auth-page';
+} elseif ($controller === 'usuario' && $action === 'perfil') {
+    $pageClass = 'perfil-page';
+} elseif ($controller === 'admin') {
+    $pageClass = 'admin-page';
+} elseif ($controller === 'carrito' && in_array($action, ['ok', 'resumen', 'finalizado', 'pagado'], true)) {
+    // Por si tu "pedido realizado" se llama distinto
+    $pageClass = 'pedido-ok-page';
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -32,9 +50,9 @@ $isHome = (!$controller) || ($controller === 'home');
 
     <!-- Tu CSS -->
     <link rel="stylesheet" href="/Healthy4Quality/assets/style.css?v=<?= time() ?>">
-
 </head>
-<body>
+
+<body class="<?= htmlspecialchars($pageClass) ?>">
 
 <header class="hq-header">
     <div class="container">
@@ -48,6 +66,7 @@ $isHome = (!$controller) || ($controller === 'home');
             <!-- CTA / ACCIONES -->
             <div class="hq-actions">
                 <a class="hq-link" href="index.php?controller=producto&action=lista">Carta</a>
+
                 <!-- Carrito -->
                 <a class="hq-cart" href="index.php?controller=carrito&action=ver" title="Carrito">
                     🛒
@@ -105,9 +124,9 @@ $isHome = (!$controller) || ($controller === 'home');
 
 <?php if ($isHome): ?>
     <!-- HOME: sin container para permitir banner ancho completo -->
-    <main>
+    <main class="main-home">
 <?php else: ?>
     <!-- RESTO PÁGINAS: con container -->
-    <main class="py-4">
+    <main class="main-inner py-4">
         <div class="container">
 <?php endif; ?>

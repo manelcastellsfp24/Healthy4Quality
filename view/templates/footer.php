@@ -9,7 +9,6 @@ $isHome = (!$controller) || ($controller === 'home');
 
 </main>
 
-
 <footer class="hq-footer">
     <div class="hq-footer-top">
         <div class="container">
@@ -56,11 +55,9 @@ $isHome = (!$controller) || ($controller === 'home');
                 <!-- Columna 3: iconos -->
                 <div class="hq-footer-col hq-footer-icons">
                     <div class="hq-icon-grid">
-                        <!-- Arriba -->
                         <a class="hq-icon" href="#" title="Teléfono" aria-label="Teléfono">📞</a>
                         <a class="hq-icon" href="#" title="Ubicación" aria-label="Ubicación">📍</a>
                         <a class="hq-icon" href="#" title="Email" aria-label="Email">✉️</a>
-                        <!-- Abajo -->
                         <a class="hq-icon" href="#" title="WhatsApp" aria-label="WhatsApp">💬</a>
                         <a class="hq-icon" href="#" title="Instagram" aria-label="Instagram">📷</a>
                         <a class="hq-icon" href="#" title="Facebook" aria-label="Facebook">f</a>

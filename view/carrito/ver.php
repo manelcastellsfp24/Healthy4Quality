@@ -1,5 +1,7 @@
 <?php include __DIR__ . '/../templates/header.php'; ?>
 
+<div class="carrito-page">
+
 <?php
 // Por si el controlador no pasa variables, intentamos leer de sesión
 $carrito = $carrito ?? ($_SESSION['carrito'] ?? []);
@@ -14,9 +16,10 @@ $carrito = $carrito ?? ($_SESSION['carrito'] ?? []);
             </p>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0">
-            <a href="index.php?controller=producto&action=lista" class="btn btn-outline-success">
+            <a href="index.php?controller=producto&action=lista" class="btn carrito-btn-seguir">
                 Seguir comprando
             </a>
+
         </div>
     </div>
 </section>
@@ -91,7 +94,7 @@ $carrito = $carrito ?? ($_SESSION['carrito'] ?? []);
                         </div>
 
                         <a href="index.php?controller=carrito&action=finalizar"
-                           class="btn btn-success w-100 mb-2">
+                            class="btn carrito-btn-finalizar w-100 mb-2">
                             Finalizar pedido
                         </a>
 
@@ -113,6 +116,8 @@ $carrito = $carrito ?? ($_SESSION['carrito'] ?? []);
     </section>
 
 <?php endif; ?>
+
+</div>
 
 <?php include __DIR__ . '/../templates/footer.php'; ?>
 

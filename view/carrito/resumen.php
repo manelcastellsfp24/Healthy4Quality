@@ -1,23 +1,58 @@
 <?php include __DIR__ . '/../templates/header.php'; ?>
 
-<section class="mb-5">
-  <div class="card border-0 shadow-sm p-4 rounded-4">
-    <h1 class="h3 fw-bold mb-3">✅ Pedido realizado correctamente</h1>
+<section class="pedido-ok-sec">
+  <div class="container">
 
-    <p>Tu número de pedido es: <strong><?= (int)$id_pedido ?></strong></p>
+    <div class="pedido-ok-card">
+      <h1 class="pedido-ok-title">
+        ✅ Pedido realizado correctamente
+      </h1>
 
-    <p><strong>Total:</strong> <?= number_format((float)$total, 2) ?> €</p>
+      <p class="pedido-ok-line">
+        Tu número de pedido es: <strong>#<?= (int)$id_pedido ?></strong>
+      </p>
 
-    <?php if (!empty($descuento) && $descuento > 0): ?>
-      <p class="text-success"><strong>Descuento:</strong> -<?= number_format((float)$descuento, 2) ?> €</p>
-      <p><strong>Oferta aplicada:</strong> <?= htmlspecialchars($ofertaAplicada) ?></p>
-      <p class="fs-5"><strong>Total pagado:</strong> <?= number_format((float)$total_final, 2) ?> €</p>
-    <?php else: ?>
-      <p class="fs-5"><strong>Total pagado:</strong> <?= number_format((float)$total_final, 2) ?> €</p>
-    <?php endif; ?>
+      <div class="pedido-ok-info">
+        <div class="pedido-ok-row">
+          <span>Total</span>
+          <strong><?= number_format((float)$total, 2) ?> €</strong>
+        </div>
 
-    <a class="btn btn-success" href="index.php?controller=producto&action=lista">Volver a productos</a>
+        <?php if (!empty($descuento) && (float)$descuento > 0): ?>
+          <div class="pedido-ok-row pedido-ok-row-desc">
+            <span>Descuento</span>
+            <strong>-<?= number_format((float)$descuento, 2) ?> €</strong>
+          </div>
+        <?php endif; ?>
+
+        <?php if (!empty($oferta_aplicada)): ?>
+          <div class="pedido-ok-row">
+            <span>Oferta aplicada</span>
+            <strong><?= htmlspecialchars($oferta_aplicada) ?></strong>
+          </div>
+        <?php endif; ?>
+
+        <?php
+          // Si tu controlador ya calcula $total_pagado, lo usamos.
+          // Si no, lo calculamos con total - descuento.
+          $total_pagado = $total_pagado ?? ((float)$total - (float)($descuento ?? 0));
+        ?>
+
+        <hr class="pedido-ok-hr">
+
+        <div class="pedido-ok-row pedido-ok-row-total">
+          <span>Total pagado</span>
+          <strong><?= number_format((float)$total_pagado, 2) ?> €</strong>
+        </div>
+      </div>
+
+      <a href="index.php?controller=producto&action=lista" class="pedido-ok-btn">
+        Volver a productos
+      </a>
+    </div>
+
   </div>
 </section>
 
 <?php include __DIR__ . '/../templates/footer.php'; ?>
+
