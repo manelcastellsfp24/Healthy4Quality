@@ -1,22 +1,29 @@
 <?php
-class Database {
-    private static $host = "localhost";
-    private static $dbname = "Restaurante";
-    private static $user = "root";
-    private static $password = "tu_contraseña_segura";
 
-    public static function conectar() {
+class Database
+{
+    public static function conectar()
+    {
+        $host = "sql213.infinityfree.com";
+        $db   = "if0_40855339_healthy4quality";
+        $user = "if0_40855339";
+        $pass = "c6enqeBFiJVZFiQ"; // password del vPanel
+
         try {
-            $conexion = new PDO(
-                "mysql:host=" . self::$host . ";dbname=" . self::$dbname . ";charset=utf8",
-                self::$user,
-                self::$password
+            return new PDO(
+                "mysql:host=$host;port=3306;dbname=$db;charset=utf8mb4",
+                $user,
+                $pass,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                ]
             );
-            $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $conexion;
         } catch (PDOException $e) {
             die("Error de conexión: " . $e->getMessage());
         }
     }
 }
-?>
+
+
+
