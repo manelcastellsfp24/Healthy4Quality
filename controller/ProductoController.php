@@ -9,10 +9,4 @@ class ProductoController {
     }
 }
 
-class HomeController {
-    public function index() {
-        $productosDestacados = Producto::getDestacados(4);
-        require __DIR__ . "/../view/home.php";
-    }
-}
 ?>
